@@ -1,19 +1,77 @@
-import React, { Component } from "react";
+import { useState } from "react";
 import {
   MDBBtn,
   MDBContainer,
   MDBCard,
   MDBCardBody,
   MDBInput,
-  MDBIcon,
   MDBRow,
   MDBCol,
-  MDBCheckbox,
 } from "mdb-react-ui-kit";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
-export default class Singup extends Component {
-  render() {
-    return (
+export default function RegisterVendedor() {
+  const [nombres, setNombres] = useState("prueba");
+  const [apellidos, setApellidos] = useState("prueba");
+  const [email, setEmail] = useState("prueba@prueba.co");
+  const [celular, setCelular] = useState("0123456789");
+  const [direccionEstablecimiento, setDireccionEstablecimiento] = useState(
+    "direccion de prueba"
+  );
+  const [idDocumento, setIdDocumento] = useState("1234567890");
+  const [password, setPassword] = useState("123456");
+  const [nit, setNit] = useState("0123456789");
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const vendedorObject = {
+      nombres,
+      apellidos,
+      celular,
+      direccionEstablecimiento,
+      email,
+      idDocumento,
+      password,
+      nit,
+    };
+
+    try {
+      axios
+        .post(`${process.env.REACT_APP_API}/vendedor`, vendedorObject)
+        .then(function (response) {
+          const { data } = response;
+          if (data?.errors) {
+            data.errors.forEach(function (message) {
+              toast.error(message.msg);
+            });
+          } else {
+            toast.success("Registrado con éxito");
+            //window.location.href = "/login";
+            navigate("/login");
+          }
+        });
+    } catch (error) {
+      console.log(error);
+    }
+
+    /*
+    this.setState({
+      nombres: "",
+      apellidos: "",
+      celular: "",
+      direccionEstablecimiento: "",
+      email: "",
+      idDocumento: "",
+      password: "",
+      nit: "",
+    });
+    */
+  };
+  return (
+    <form onSubmit={handleSubmit}>
       <MDBContainer fluid className="my-5">
         <MDBRow className="g-0 align-items-center">
           <MDBCol col="6">
@@ -34,6 +92,9 @@ export default class Singup extends Component {
                       label="Nombres"
                       id="nombres"
                       type="text"
+                      value={nombres}
+                      onChange={(e) => setNombres(e.target.value)}
+                      required
                     />
                   </MDBCol>
 
@@ -43,6 +104,9 @@ export default class Singup extends Component {
                       label="Apellidos"
                       id="apellidos"
                       type="text"
+                      value={apellidos}
+                      onChange={(e) => setApellidos(e.target.value)}
+                      required
                     />
                   </MDBCol>
                 </MDBRow>
@@ -52,39 +116,57 @@ export default class Singup extends Component {
                   label="Documento de identificación"
                   id="idDocumento"
                   type="number"
+                  value={idDocumento}
+                  onChange={(e) => setIdDocumento(e.target.value)}
+                  required
                 />
                 <MDBInput
                   wrapperClass="mb-4"
                   label="Correo"
                   id="correo"
                   type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
                 />
                 <MDBInput
                   wrapperClass="mb-4"
                   label="Dirección del establecimiento"
-                  id="direccion"
+                  id="direccionEstablecimiento"
                   type="text"
+                  value={direccionEstablecimiento}
+                  onChange={(e) => setDireccionEstablecimiento(e.target.value)}
+                  required
                 />
                 <MDBInput
                   wrapperClass="mb-4"
                   label="NIT"
                   id="nit"
                   type="text"
+                  value={nit}
+                  onChange={(e) => setNit(e.target.value)}
+                  required
                 />
                 <MDBInput
                   wrapperClass="mb-4"
                   label="Celular"
                   id="celular"
                   type="number"
+                  value={celular}
+                  onChange={(e) => setCelular(e.target.value)}
+                  required
                 />
                 <MDBInput
                   wrapperClass="mb-4"
                   label="Contraseña"
                   id="password"
                   type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
                 />
 
-                <MDBBtn className="w-100 mb-4" size="md">
+                <MDBBtn className="w-100 mb-4" size="md" type="submit">
                   Crear cuenta
                 </MDBBtn>
               </MDBCardBody>
@@ -101,6 +183,6 @@ export default class Singup extends Component {
           </MDBCol>
         </MDBRow>
       </MDBContainer>
-    );
-  }
+    </form>
+  );
 }
