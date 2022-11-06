@@ -2,67 +2,72 @@ import bcryptjs from "bcryptjs";
 import mongoose from "mongoose";
 const { Schema, model } = mongoose;
 
-const userSchema = new Schema({
-  nombres: {
-    type: String,
-    required: true,
-    trim: true,
-    lowercase: true,
+const userSchema = new Schema(
+  {
+    nombres: {
+      type: String,
+      required: true,
+      trim: true,
+      lowercase: true,
+    },
+    apellidos: {
+      type: String,
+      required: true,
+      trim: true,
+      lowercase: true,
+    },
+    idDocumento: {
+      type: Number,
+      required: true,
+      trim: true,
+      index: { unique: true },
+    },
+    direccion: {
+      type: String,
+      required: false,
+      trim: true,
+      lowercase: true,
+    },
+    direccionEstablecimiento: {
+      type: String,
+      required: false,
+      trim: true,
+      lowercase: true,
+    },
+    nit: {
+      type: String,
+      required: false,
+      trim: true,
+      lowercase: true,
+      index: { unique: true },
+    },
+    telefono: {
+      type: Number,
+      required: true,
+      trim: true,
+      lowercase: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      trim: true,
+      lowercase: true,
+      index: { unique: true },
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    rid: {
+      type: Schema.Types.ObjectId,
+      ref: "Rol",
+      required: true,
+    },
   },
-  apellidos: {
-    type: String,
-    required: true,
-    trim: true,
-    lowercase: true,
-  },
-  idDocumento: {
-    type: Number,
-    required: true,
-    trim: true,
-    index: { unique: true },
-  },
-  direccion: {
-    type: String,
-    required: false,
-    trim: true,
-    lowercase: true,
-  },
-  direccionEstablecimiento: {
-    type: String,
-    required: false,
-    trim: true,
-    lowercase: true,
-  },
-  nit: {
-    type: String,
-    required: false,
-    trim: true,
-    lowercase: true,
-    index: { unique: true },
-  },
-  telefono: {
-    type: Number,
-    required: true,
-    trim: true,
-    lowercase: true,
-  },
-  email: {
-    type: String,
-    required: true,
-    trim: true,
-    lowercase: true,
-    index: { unique: true },
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-  rid: {
-    type: Schema.Types.ObjectId,
-    ref: "Rol",
-    required: true,
-  },
-});
+  {
+    timestamps: true,
+  }
+);
 
 userSchema.pre("save", async function (next) {
   const user = this;
