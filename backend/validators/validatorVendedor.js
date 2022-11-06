@@ -1,19 +1,10 @@
-import { validationResult, body, check } from "express-validator";
+import { body, check } from "express-validator";
+import { validationResultExpress } from "./validationResultExpress.js";
 import {
   findByEmail,
   findByIdDocument,
   findByNit,
 } from "../controllers/vendedor.controller.js";
-
-export const validationResultExpress = (req, res, next) => {
-  const errors = validationResult(req);
-
-  if (!errors.isEmpty()) {
-    return res.status(200).json({ errors: errors.array() });
-  }
-
-  next();
-};
 
 export const bodyRegisterVendedorValidator = [
   body("nombres")

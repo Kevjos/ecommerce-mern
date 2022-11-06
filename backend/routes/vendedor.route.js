@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { createVendedor } from "../controllers/vendedor.controller.js";
 
-import { bodyRegisterVendedorValidator } from "../middlewares/validatorManager.js";
+import { bodyRegisterVendedorValidator } from "../validators/validatorVendedor.js";
 
 const router = Router();
 

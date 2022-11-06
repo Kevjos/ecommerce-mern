@@ -3,9 +3,7 @@ import { Toaster } from "react-hot-toast";
 
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-//import { Router } from '@reach/router'
 
-//import { RegisterVendedor, HomePrincipal, IniciarSesion } from "./pages";
 import Menu from "./components/Menu";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -31,23 +29,4 @@ function App() {
     </BrowserRouter>
   );
 }
-/*
-function Navigation() {
-  return (
-    <nav>
-      <ul>
-        <li>
-          <Link to="/singupvendedor">Singup vendedor</Link>
-        </li>
-        <li>
-          <Link to="/home">Home</Link>
-        </li>
-        <li>
-          <Link to="/login">Login</Link>
-        </li>
-      </ul>
-    </nav>
-  );
-}
-*/
 export default App;
