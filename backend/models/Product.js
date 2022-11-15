@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import mongoosePaginate from "mongoose-paginate-v2";
+
 const { Schema, model } = mongoose;
 
 const productSchema = new Schema(
@@ -52,5 +54,7 @@ const productSchema = new Schema(
 productSchema.methods.setImgUrl = function setImgUrl(filename) {
   this.imagen = `${process.env.APP_HOST}:${process.env.APP_PORT}/public/${filename}`;
 };
+
+productSchema.plugin(mongoosePaginate);
 
 export const Product = model("Product", productSchema);

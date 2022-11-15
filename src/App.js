@@ -17,6 +17,7 @@ function App() {
     <BrowserRouter>
       <Toaster />
       <Menu />
+
       <Routes>
         <Route index element={<Home />} />
         <Route path="/home" element={<Home />} />
@@ -24,6 +25,7 @@ function App() {
         <Route path="/singupvendedor" element={<RegisterVendedor />} />
         <Route path="/registerproduct" element={<RegisterProduct />} />
         <Route path="/login" element={<Login />} />
+        {/* <Route path="/cart" element={<Cart />} />*/}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>

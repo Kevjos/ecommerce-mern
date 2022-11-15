@@ -1,9 +1,6 @@
 import { Link } from "react-router-dom";
-import Nav from "react-bootstrap/Nav";
-import Navbar from "react-bootstrap/Navbar";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+import { Container, Navbar, Nav } from "react-bootstrap";
+import { BiCart } from "react-icons/bi";
 
 export default function Menu() {
   return (
@@ -13,7 +10,7 @@ export default function Menu() {
           <Container>
             <Navbar.Brand>
               <Link to={"/home"} className="nav-link">
-                App React MERN Stack
+                Ecommerce MERN Stack
               </Link>
             </Navbar.Brand>
 
@@ -44,51 +41,16 @@ export default function Menu() {
                   Registrar producto
                 </Link>
               </Nav>
+              <Nav>
+                <Link to={"/cart"} className="nav-link">
+                  <BiCart size="1.5rem" />
+                  <span>Cart</span>
+                </Link>
+              </Nav>
             </Nav>
           </Container>
         </Navbar>
       </header>
-      {/*
-      <Container>
-        <Row>
-          <Col md={12}>
-            <div className="wrapper">
-              <Route
-                exact
-                path="/"
-                component={(props) => <Home {...props} />}
-              />
-              <Route
-                exact
-                path="/home"
-                component={(props) => <Home {...props} />}
-              />
-              <Route
-                exact
-                path="/singupvendedor"
-                component={(props) => <Singup {...props} />}
-              />
-              <Route
-                exact
-                path="/singupcomprador"
-                component={(props) => <RegisterComprador {...props} />}
-              />
-              <Route
-                exact
-                path="/login"
-                component={(props) => <Login {...props} />}
-              />
-              <Route
-                exact
-                path="/registerproduct"
-                component={(props) => <RegisterProduct {...props} />}
-              />
-              <Route exact path="*" component={(props) => <NotFoundPage />} />
-            </div>
-          </Col>
-        </Row>
-      </Container>
-      */}
     </div>
   );
 }
