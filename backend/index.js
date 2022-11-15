@@ -37,7 +37,7 @@ app.use(
 );
 
 app.use("/api/v1/vendedor", vendedorRouter);
-app.use("/api/v1/producto", productRouter);
+app.use("/api/v1/productos", productRouter);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(process.env.APP_HOST + ":" + PORT));

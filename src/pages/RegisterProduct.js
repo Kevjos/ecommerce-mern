@@ -48,7 +48,7 @@ export default function RegisterProduct() {
         },
       };
       axios
-        .post(`${process.env.REACT_APP_API}/producto`, formData, config)
+        .post(`${process.env.REACT_APP_API}/productos`, formData, config)
         .then(function (response) {
           const { data } = response;
           if (data?.errors) {
