@@ -2,21 +2,33 @@ import { Router } from "express";
 import {
   registerProduct,
   getProducts,
+  getProductById,
   updateProduct,
   deleteProduct,
+  getProductsByOwner,
 } from "../controllers/product.controller.js";
+
+import { requireToken, isSeller } from "../middlewares/requireToken.js";
 
 import { bodyRegisterProductValidator } from "../validators/validatorProduct.js";
 import { verifyFile } from "../middlewares/verifyFile.js";
-//import { sanitizeQueryValidator } from "../validators/validateQueryAndParams.js";
 
 const router = Router();
 
-router.post("/", bodyRegisterProductValidator, verifyFile, registerProduct);
+router.post(
+  "/",
+  requireToken,
+  isSeller,
+  bodyRegisterProductValidator,
+  verifyFile,
+  registerProduct
+);
 //router.get("/search/categoria", getProductByCategory);
 router.get("/search", getProducts);
-//router.get("/", getProducts);
-router.put("/:id", updateProduct);
-router.delete("/:id", deleteProduct);
+
+router.get("/myproducts", requireToken, isSeller, getProductsByOwner);
+router.get("/:id", requireToken, isSeller, getProductById);
+router.put("/:id", requireToken, isSeller, updateProduct);
+router.delete("/:id", requireToken, isSeller, deleteProduct);
 
 export default router;

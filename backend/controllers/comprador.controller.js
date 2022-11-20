@@ -2,39 +2,38 @@ import { User } from "../models/User.js";
 import { Rol } from "../models/Rol.js";
 import { sendEmail } from "../services/emails.js";
 
-export const createVendedor = async (req, res) => {
+export const createComprador = async (req, res) => {
   try {
-    let rolId = await Rol.findOne({ nombre: "vendedor" });
+    let rolId = await Rol.findOne({ nombre: "comprador" });
     let {
       nombres,
       apellidos,
       idDocumento,
-      direccionEstablecimiento,
-      nit,
+      direccion,
       celular,
       email,
       password,
     } = req.body;
 
-    const vendedor = new User({
-      nombres: nombres,
-      apellidos: apellidos,
-      idDocumento: idDocumento,
-      direccionEstablecimiento: direccionEstablecimiento,
-      nit: nit,
+    const comprador = new User({
+      nombres,
+      apellidos,
+      idDocumento,
+      direccion,
       telefono: celular,
-      email: email,
-      password: password,
+      email,
+      password,
       rols: rolId._id,
     });
 
-    const newVendedor = await vendedor.save();
+    const newComprador = await comprador.save();
 
     await sendEmail(email);
 
-    return res.status(201).json({ newVendedor });
+    return res.status(201).json({ newComprador });
   } catch (error) {
-    return res.status(500).json({ error: "error de servidor" });
+    //return res.status(500).json({ error: "error de servidor" });
+    console.log(error);
   }
 };
 
@@ -53,18 +52,6 @@ export const findByEmail = async (req, res) => {
 export const findByIdDocument = async (req, res) => {
   try {
     const user = await User.findOne({ idDocumento: req });
-
-    if (!user) return false;
-
-    return true;
-  } catch (error) {
-    return res.status(500).json({ error: "error de servidor" });
-  }
-};
-
-export const findByNit = async (req, res) => {
-  try {
-    const user = await User.findOne({ nit: req });
 
     if (!user) return false;
 
