@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import FormData from "form-data";
 import Form from "react-bootstrap/Form";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
@@ -10,9 +11,11 @@ import {
   MDBInput,
 } from "mdb-react-ui-kit";
 import axios from "axios";
-import toast from "react-hot-toast";
+import { Row } from "react-bootstrap";
 
-export default function RegisterProduct() {
+export default function EditProduct() {
+  const navigate = useNavigate();
+
   const [nombre, setNombre] = useState("");
   const [cantidad, setCantidad] = useState("");
   const [descripcion, setDescripcion] = useState("");
@@ -21,14 +24,39 @@ export default function RegisterProduct() {
   const [precio, setPrecio] = useState("");
   const [imagen, setImagen] = useState("");
 
-  const resetForm = () => {
-    setNombre("");
-    setCantidad("");
-    setDescripcion("");
-    setCategoria("");
-    setEstado("");
-    setPrecio("");
+  const token = localStorage.getItem("TOKEN");
+  const config = {
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${token}`,
+    },
   };
+
+  let { id } = useParams();
+
+  let api = `${process.env.REACT_APP_API}/productos/` + id;
+
+  async function cargarProductos() {
+    await axios
+      .get(api, config)
+      .then(({ data }) => {
+        const product = data.data;
+        setNombre(product.nombre);
+        setCategoria(product.categoria);
+        setDescripcion(product.descripcion);
+        setImagen(product.imagen);
+        setCantidad(product.cantidad);
+        setEstado(product.estado);
+        setPrecio(product.precio);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  useEffect(() => {
+    cargarProductos();
+  }, [api]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -42,26 +70,12 @@ export default function RegisterProduct() {
       formData.append("categoria", categoria);
       formData.append("estado", estado);
       formData.append("precio", precio);
-      const token = localStorage.getItem("TOKEN");
-      const config = {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      };
+
       axios
-        .post(`${process.env.REACT_APP_API}/productos`, formData, config)
+        .put(`${process.env.REACT_APP_API}/productos/` + id, formData, config)
         .then(function (response) {
           const { data } = response;
-          if (data?.errors) {
-            data.errors.forEach(function (message) {
-              toast.error(message.msg);
-            });
-          } else {
-            resetForm();
-            e.target.reset();
-            toast.success(`Producto ${nombre} registrado`);
-          }
+          navigate(-1);
         });
     } catch (error) {
       console.log(error);
@@ -79,7 +93,7 @@ export default function RegisterProduct() {
           }}
         >
           <MDBCardBody className="p-5 shadow-5 text-center">
-            <h2 className="fw-bold mb-5">Registrar producto</h2>
+            <h2 className="fw-bold mb-5">Editar producto</h2>
 
             <MDBInput
               wrapperClass="mb-4"
@@ -107,7 +121,6 @@ export default function RegisterProduct() {
                     setImagen(null);
                   }
                 }}
-                required
               />
             </div>
 
@@ -138,32 +151,42 @@ export default function RegisterProduct() {
             </div>
 
             <div className="form-outline mb-4">
-              <Form.Select
-                aria-label="Categoría"
-                id="categoria"
-                value={categoria}
+              <Form.Group
+                className="mb-3"
                 onChange={(e) => setCategoria(e.target.value)}
-                required
               >
-                <option value="">Categoría</option>
-                <option value="Tecnologia">Tecnología</option>
-                <option value="Ferreteria">Ferretería</option>
-                <option value="Juguetes">Juguetes</option>
-              </Form.Select>
+                <Form.Label>Categoría</Form.Label>
+                <Form.Select value={categoria} required>
+                  <option disabled selected>
+                    -- Seleccione --
+                  </option>
+
+                  <option value="Ferreteria">Ferretería</option>
+                  <option value="Juguetes">Juguetes</option>
+                  <option value="Tecnología">Tecnología</option>
+                </Form.Select>
+              </Form.Group>
             </div>
 
             <div className="form-outline mb-4">
-              <Form.Select
-                aria-label="Estado"
-                id="estado"
-                value={estado}
+              <Form.Group
+                className="mb-3"
                 onChange={(e) => setEstado(e.target.value)}
-                required
               >
-                <option value="">Estado</option>
-                <option value="Nuevo">Nuevo</option>
-                <option value="Usado">Usado</option>
-              </Form.Select>
+                <Form.Label>Estado</Form.Label>
+                <Form.Select
+                  aria-label="Estado"
+                  id="estado"
+                  value={estado}
+                  required
+                >
+                  <option disabled selected>
+                    -- Seleccione --
+                  </option>
+                  <option value="Usado">Usado</option>
+                  <option value="Nuevo">Nuevo</option>
+                </Form.Select>
+              </Form.Group>
             </div>
 
             <MDBInput
@@ -177,9 +200,20 @@ export default function RegisterProduct() {
               onChange={(e) => setPrecio(e.target.value)}
               required
             />
-            <MDBBtn className="w-100 mb-4" size="md">
-              Registrar producto
-            </MDBBtn>
+            <div>
+              <Row>
+                <MDBBtn className="w-100 mb-4" size="md">
+                  Actualizar producto
+                </MDBBtn>
+                <MDBBtn
+                  className="w-100 mb-4"
+                  size="md"
+                  onClick={() => navigate(-1)}
+                >
+                  Cancelar
+                </MDBBtn>
+              </Row>
+            </div>
           </MDBCardBody>
         </MDBCard>
       </MDBContainer>
