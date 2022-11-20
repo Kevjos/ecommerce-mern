@@ -39,7 +39,6 @@ const userSchema = new Schema(
       required: false,
       trim: true,
       lowercase: true,
-      index: { unique: true },
     },
     telefono: {
       type: Number,
@@ -58,10 +57,9 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
-    rid: {
+    rols: {
       type: Schema.Types.ObjectId,
       ref: "Rol",
-      required: true,
     },
   },
   {

@@ -3,16 +3,15 @@ import { validationResultExpress } from "./validationResultExpress.js";
 import {
   findByEmail,
   findByIdDocument,
-  findByNit,
-} from "../controllers/vendedor.controller.js";
+} from "../controllers/comprador.controller.js";
 
-export const bodyRegisterVendedorValidator = [
+export const bodyRegisterCompradorValidator = [
   body("nombres")
     .trim()
     .not()
     .isEmpty()
     .withMessage("el campo nombres no puede estar vacío")
-    .isLength({ min: 3, max: 30 })
+    .isLength({ min: 3, max: 20 })
     .isString()
     .withMessage("solo se permiten letras en el campo nombres"),
   body("apellidos")
@@ -20,22 +19,20 @@ export const bodyRegisterVendedorValidator = [
     .not()
     .isEmpty()
     .withMessage("el campo apellidos no puede estar vacío")
-    .isLength({ min: 3, max: 30 })
+    .isLength({ min: 3, max: 20 })
     .isString()
     .withMessage("solo se permiten letras en el campo apellidos"),
-  body("direccionEstablecimiento")
+  body("direccion")
     .trim()
     .not()
     .isEmpty()
-    .withMessage("el campo dirección del establecimiento no puede estar vacío")
-    .isLength({ min: 6, max: 20 })
+    .withMessage("el campo dirección no puede estar vacío")
+    .isLength({ min: 6, max: 30 })
     .withMessage(
-      "el número de carácteres minímo en el campo dirección del establecimiento es 6 y máximo es 20"
+      "el número de carácteres minímo en el campo dirección es 6 y máximo es 20"
     )
     .isString()
-    .withMessage(
-      "solo se permiten letras en el campo dirección del establecimiento"
-    ),
+    .withMessage("solo se permiten letras en el campo dirección"),
   body("email", "Formato de email incorrecto")
     .trim()
     .not()
@@ -86,16 +83,6 @@ export const bodyRegisterVendedorValidator = [
   body("password", "el campo contraseña debe tener mínimo 6 carácteres")
     .trim()
     .isLength({ min: 6 }),
-  body("nit", "el campo NIT debe tener mínimo 10 carácteres")
-    .trim()
-    .isLength({ min: 10 }),
-  check("nit").custom((value) => {
-    return findByNit(value).then((user) => {
-      if (user) {
-        return Promise.reject("El nit ya está registrado");
-      }
-    });
-  }),
 
   validationResultExpress,
 ];

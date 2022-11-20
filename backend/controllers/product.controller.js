@@ -1,5 +1,6 @@
 import { Product } from "../models/Product.js";
 import { uploadImage } from "../services/storage.js";
+import fs from "fs";
 
 const myCustomLabels = {
   totalDocs: "totalProducts",
@@ -27,6 +28,7 @@ export const registerProduct = async (req, res) => {
       categoria: categoria,
       estado: estado,
       precio: precio,
+      userId: req.uid,
     });
 
     const newProduct = await product.save();
@@ -42,7 +44,7 @@ export const getProducts = async (req, res) => {
 
     const page = req.query.page ? parseInt(req.query.page) : 1;
 
-    let query = { nombre: { $regex: name } };
+    let query = { nombre: { $regex: name }, cantidad: { $gt: 0 } };
 
     const options = {
       page,
@@ -52,10 +54,45 @@ export const getProducts = async (req, res) => {
 
     const products = await Product.paginate(query, options);
 
-    if (products.totalProducts == 0)
-      return res.status(404).json({ error: `No existe el producto ${name}` });
+    if (products.totalProducts == 0) {
+      if (name != "") {
+        return res
+          .status(404)
+          .json({ error: `No existe el producto ${name}.` });
+      }
+      return res.status(404).json({ error: `No hay productos registrados.` });
+    }
 
     return res.json({ products });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error });
+  }
+};
+
+export const getProductById = async (req, res) => {
+  try {
+    let { id } = req.params;
+    const product = await Product.findById(id);
+
+    if (!product)
+      return res.status(404).json({ error: `El producto no está registrado` });
+
+    return res.json({ data: product });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error });
+  }
+};
+
+export const getProductsByOwner = async (req, res) => {
+  try {
+    const products = await Product.find({ userId: req.uid });
+
+    if (!products)
+      return res.status(404).json({ error: `No hay productos registrados` });
+
+    return res.json({ data: products });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ error });
@@ -93,22 +130,31 @@ export const deleteProduct = async (req, res) => {
   try {
     const { id } = req.params;
     const product = await Product.findById(id);
+    let imageName = product.imagen.split("/")[4];
 
     if (!product)
       return res.status(404).json({ error: "No existe el producto" });
-    /*
-    if (!product._id.equals(req._id))
+
+    if (product.userId != req.uid)
       return res.status(401).json({ error: "No le pertenece ese producto" });
-      */
+
+    fs.unlink(`.${process.env.APP_DIR_STORAGE}/${imageName}`, (err) => {
+      if (err) {
+        throw err;
+      }
+    });
 
     await product.remove();
 
     return res.status(200).json({ msg: "Producto eliminado" });
   } catch (error) {
+    console.log(error);
     if (error.kind === "ObjectId") {
       return res.status(403).json({ error: "Formato id incorrecto" });
     }
-    return res.status(500).json({ error: "error del servidor" });
+    return res.status(500).json({
+      error: "error del servidor",
+    });
   }
 };
 
@@ -125,16 +171,23 @@ export const updateProduct = async (req, res) => {
     if (!product)
       return res.status(404).json({ error: "No existe el producto" });
 
-    /*
-    if (!product._id.equals(req._id))
+    if (product.userId != req.uid)
       return res.status(401).json({ error: "No le pertenece ese producto" });
-      */
 
     if (req.files?.imagen) {
+      let imageName = product.imagen.split("/")[4];
       filename = await uploadImage(req.files.imagen);
       if (filename == "Formato inválido") {
         return res.status(400).send({ msg: "Solo se permiten imagenes" });
       }
+      fs.unlink(`.${process.env.APP_DIR_STORAGE}/${imageName}`, (err) => {
+        if (err) {
+          throw err;
+        } else {
+          console.log(err);
+        }
+      });
+
       product.imagen = filename;
     }
 

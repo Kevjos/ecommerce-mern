@@ -8,7 +8,9 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 import vendedorRouter from "./routes/vendedor.route.js";
+import compradorRouter from "./routes/comprador.route.js";
 import productRouter from "./routes/product.route.js";
+import authRouter from "./routes/auth.route.js";
 
 const app = express();
 
@@ -37,7 +39,9 @@ app.use(
 );
 
 app.use("/api/v1/vendedor", vendedorRouter);
+app.use("/api/v1/comprador", compradorRouter);
 app.use("/api/v1/productos", productRouter);
+app.use("/api/v1/auth", authRouter);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(process.env.APP_HOST + ":" + PORT));
