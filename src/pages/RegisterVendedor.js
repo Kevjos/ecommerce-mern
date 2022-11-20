@@ -49,26 +49,12 @@ export default function RegisterVendedor() {
             });
           } else {
             toast.success("Registrado con éxito");
-            //window.location.href = "/login";
             navigate("/login");
           }
         });
     } catch (error) {
       console.log(error);
     }
-
-    /*
-    this.setState({
-      nombres: "",
-      apellidos: "",
-      celular: "",
-      direccionEstablecimiento: "",
-      email: "",
-      idDocumento: "",
-      password: "",
-      nit: "",
-    });
-    */
   };
   return (
     <form onSubmit={handleSubmit}>

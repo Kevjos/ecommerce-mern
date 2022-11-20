@@ -1,9 +1,8 @@
 import React from "react";
-import { Button, Card } from "react-bootstrap";
-
+import { Container, Row, Button, Card } from "react-bootstrap";
 import { BsCartPlus } from "react-icons/bs";
 
-export default function ProductCard({ page, results }) {
+export default function ProductCard({ page, results, search }) {
   let display;
   if (results) {
     display = results.map((x) => {
@@ -57,8 +56,26 @@ export default function ProductCard({ page, results }) {
         </div>
       );
     });
+  } else if (search) {
+    display = (
+      <Container className="py-4">
+        <Row>
+          <div className="card text-center">
+            <div className="card-body">No se encontró el producto.</div>
+          </div>
+        </Row>
+      </Container>
+    );
   } else {
-    display = "No se encontró el producto";
+    display = (
+      <Container className="py-4">
+        <Row>
+          <div className="card text-center">
+            <div className="card-body">No hay productos registrados.</div>
+          </div>
+        </Row>
+      </Container>
+    );
   }
 
   return <>{display}</>;

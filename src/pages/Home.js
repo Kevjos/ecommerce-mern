@@ -29,7 +29,7 @@ export default function Home() {
       <Container className="py-4">
         <Search setSearch={setSearch} updatePageNumber={updatePageNumber} />
         <Row>
-          <ProductCard page="/" results={productsList} />
+          <ProductCard page="/" results={productsList} search={search} />
         </Row>
       </Container>
       <Pagination
