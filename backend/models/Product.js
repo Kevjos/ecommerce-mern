@@ -11,10 +11,15 @@ const productSchema = new Schema(
       trim: true,
       lowercase: true,
     },
+    /*
     imagen: {
-      type: String,
-      required: true,
-      trim: true,
+      public_id: String,
+      url: String,
+    },
+    */
+    imagen: {
+      data: Buffer,
+      contentType: String,
     },
     cantidad: {
       type: Number,

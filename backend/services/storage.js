@@ -18,7 +18,8 @@ export const uploadImage = (image) => {
 
     if (!allowedExtension.includes(extensionName)) {
       return "Formato inválido";
-    } else {
+    }
+    /*else {
       image.mv(urlInt, (err) => {
         if (err) {
           return err;
@@ -26,6 +27,7 @@ export const uploadImage = (image) => {
       });
       return urlExt;
     }
+    */
   } catch (err) {
     return err;
   }

@@ -1,3 +1,6 @@
+import { useContext } from "react";
+import { useAuthContext } from "../contexts/authContext";
+import { CartContext } from "../contexts/cartContext";
 import { Link } from "react-router-dom";
 import { Container, Navbar, Nav } from "react-bootstrap";
 import { BiCart } from "react-icons/bi";
@@ -9,10 +12,10 @@ import {
   HOME,
   PRODUCTS,
 } from "../config/router/paths";
-import { useAuthContext } from "../contexts/authContext";
 
 export default function Menu() {
   const { isAuthenticated, isSeller, isBuyer } = useAuthContext();
+  const { cartOpen, productsLength, total } = useContext(CartContext);
 
   return (
     <div className="App">
@@ -79,8 +82,27 @@ export default function Menu() {
                 <>
                   <Nav>
                     <Link to={"/cart"} className="nav-link">
-                      <BiCart size="1.5rem" />
-                      <span>Cart</span>
+                      <BiCart size="2rem" />
+                      {cartOpen && productsLength > 0 && (
+                        <span
+                          style={{
+                            position: "relative",
+                            left: "-21px",
+                            top: "-18px",
+                            color: "red",
+                          }}
+                        >
+                          {productsLength}
+                        </span>
+                      )}
+                      <span
+                        style={{
+                          marginLeft:
+                            cartOpen && productsLength > 0 ? "-10px" : 0,
+                        }}
+                      >
+                        Cart
+                      </span>
                     </Link>
                   </Nav>
                 </>

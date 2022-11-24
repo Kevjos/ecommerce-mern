@@ -39,13 +39,15 @@ export const login = async (req, res) => {
     if (!respuestaPassword)
       return res.status(403).json({ error: "Contraseña incorrecta" });
 
-    // Generar el token JWT
-    const { token, rol, expiresIn } = generateToken(user.id, user.rols.nombre);
+    const { token, rol, expiresIn, nombres } = generateToken(
+      user.id,
+      user.rols.nombre,
+      user.nombres
+    );
     req.user_id = user.id;
     generateRefreshToken(user.id, rol, res);
-    return res.json({ token, rol, expiresIn });
+    return res.json({ token, rol, expiresIn, nombres });
   } catch (error) {
-    //console.log("Error desde el auth controller: ", error);
     return res.status(500).json({ error: "Error del servidor" });
   }
 };

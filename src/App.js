@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
@@ -22,61 +23,57 @@ import {
   PRODUCTS,
 } from "./config/router/paths";
 import { AuthContextProvider } from "./contexts/authContext";
+import { CartProvider } from "./contexts/cartContext";
 import Menu from "./components/Menu";
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import HomeSeller from "./pages/HomeSeller";
-import EditProduct from "./pages/EditProduct";
-import BuyerHome from "./pages/BuyerHome";
-import NotFoundPage from "./pages/NotFoundPage";
-import Logout from "./pages/Logout";
+const Login = lazy(() => import("./pages/Login"));
+const HomeSeller = lazy(() => import("./pages/HomeSeller"));
+const EditProduct = lazy(() => import("./pages/EditProduct"));
+const BuyerHome = lazy(() => import("./pages/BuyerHome"));
+const Cart = lazy(() => import("./pages/Cart"));
+const Loading = lazy(() => import("./components/Loading"));
+const Home = lazy(() => import("./pages/Home"));
+const Logout = lazy(() => import("./pages/Logout"));
+const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 function App() {
   return (
     <AuthContextProvider>
-      <BrowserRouter>
-        <Toaster />
-        <Menu />
+      <CartProvider>
+        <BrowserRouter>
+          <Toaster />
+          <Menu />
+          <Suspense fallback={<Loading />}>
+            <Routes>
+              <Route path={HOME} element={<Home />} />
+              <Route path="/" element={<PublicRoute />}>
+                <Route index element={<Home />} />
 
-        <Routes>
-          <Route path={HOME} element={<Home />} />
-          <Route path="/" element={<PublicRoute />}>
-            <Route index element={<Home />} />
+                <Route
+                  path="/singupcomprador"
+                  element={<RegisterComprador />}
+                />
+                <Route path="/singupvendedor" element={<RegisterVendedor />} />
+                <Route path={LOGIN} element={<Login />} />
+              </Route>
 
-            <Route path="/singupcomprador" element={<RegisterComprador />} />
-            <Route path="/singupvendedor" element={<RegisterVendedor />} />
-            <Route path={LOGIN} element={<Login />} />
-          </Route>
+              <Route path={SELLER} element={<PrivateRoute />}>
+                <Route index element={<HomeSeller />} />
+                <Route path={PRODUCTS} element={<HomeSeller />} />
+                <Route path={REGISTERPRODUCT} element={<RegisterProduct />} />
+                <Route path={EDITPRODUCT} element={<EditProduct />} />
+                <Route path={LOGOUT} element={<Logout />} />
+              </Route>
 
-          <Route path={SELLER} element={<PrivateRoute />}>
-            <Route index element={<HomeSeller />} />
-            <Route path={PRODUCTS} element={<HomeSeller />} />
-            <Route path={REGISTERPRODUCT} element={<RegisterProduct />} />
-            <Route path={EDITPRODUCT} element={<EditProduct />} />
-            <Route path={LOGOUT} element={<Logout />} />
-          </Route>
+              <Route path={BUYER} element={<PrivateRoute />}>
+                <Route index element={<BuyerHome />} />
+              </Route>
+              <Route path="/cart" element={<Cart />} />
 
-          <Route path={BUYER} element={<PrivateRoute />}>
-            <Route index element={<BuyerHome />} />
-          </Route>
-          {/*
-          <Route path={PRIVATE} element={<PrivateRoute />}>
-            <Route path={SELLER} element={<Seller />}>
-              <Route index element={<Seller />} />
-              <Route path={REGISTERPRODUCT} element={<RegisterProduct />} />
-            </Route>
-
-            <Route path={BUYER} element={<Buyer />}>
-              <Route index element={<Buyer />} />
-            </Route>
-            <Route path={LOGOUT} element={<Logout />} />
-          </Route>;
-          */}
-
-          {/* <Route path="/cart" element={<Cart />} />*/}
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </BrowserRouter>
+              <Route path="*" element={<NotFoundPage />} />
+            </Routes>
+          </Suspense>
+        </BrowserRouter>
+      </CartProvider>
     </AuthContextProvider>
   );
 }

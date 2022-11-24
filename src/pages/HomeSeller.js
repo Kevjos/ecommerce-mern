@@ -3,9 +3,13 @@ import { Link } from "react-router-dom";
 import { Container, Row } from "react-bootstrap";
 import { EDITPRODUCT } from "../config/router/paths";
 import axios from "axios";
+import { formatNumber } from "../config/formatNumber";
+import { useAuthContext } from "../contexts/authContext";
+import toast from "react-hot-toast";
 
 export default function HomeSeller() {
   let [productos, updateProductos] = useState([]);
+  const { names } = useAuthContext();
 
   const token = localStorage.getItem("TOKEN");
   const config = {
@@ -37,6 +41,7 @@ export default function HomeSeller() {
     axios
       .delete(`${process.env.REACT_APP_API}/productos/` + id, config)
       .then((res) => {
+        toast.success("Producto eliminado!");
         cargarProductos();
       })
       .catch((error) => {
@@ -50,7 +55,7 @@ export default function HomeSeller() {
         <div className="card text-center">
           {productos.length > 0 ? (
             <>
-              <div className="card-body">Productos del vendedor.</div>
+              <div className="card-body">Productos del vendedor {names}.</div>
               <div className="table-responsive">
                 <table className="table align-middle mb-0 bg-white">
                   <thead className="bg-light">
@@ -70,14 +75,13 @@ export default function HomeSeller() {
                       <tr key={productsList._id}>
                         <td>
                           <div className="d-flex align-items-center">
-                            {/**
-                  <img
-                    src={productsList.imagen}
-                    alt=""
-                    style="width: 45px; height: 45px"
-                    class="rounded-circle"
-                  />
-                   */}
+                            <img
+                              src={`${process.env.REACT_APP_API}/productos/image/${productsList._id}`}
+                              alt={productsList.nombre}
+                              style={{ width: "100px", height: "100px" }}
+                              className="rounded-circle"
+                            />
+
                             <div className="ms-3">
                               <p className="fw-bold mb-1">
                                 {productsList.nombre}
@@ -98,7 +102,7 @@ export default function HomeSeller() {
                         <td>{productsList.categoria}</td>
                         <td>
                           <p className="fw-normal mb-1">
-                            {productsList.precio}
+                            {formatNumber(productsList.precio)}
                           </p>
                         </td>
                         <td>
