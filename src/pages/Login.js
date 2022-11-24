@@ -35,7 +35,7 @@ export default function Login() {
             });
           } else {
             toast.success("Logueado");
-            login(data.token, data.rol);
+            login(data.token, data.rol, data.nombres);
           }
         })
         .catch(function (err) {

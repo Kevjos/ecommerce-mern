@@ -20,9 +20,12 @@ export function AuthContextProvider({ children }) {
     window.localStorage.getItem(IS_BUYER) ?? false
   );
 
-  const login = useCallback(function (token, rol) {
+  const [names, setNames] = useState("");
+
+  const login = useCallback(function (token, rol, nombres) {
     window.localStorage.setItem(TOKEN, token);
     setIsAuthenticated(true);
+    setNames(nombres);
     if (rol === "vendedor") {
       window.localStorage.setItem(IS_SELLER, rol);
       setIsBuyer(false);
@@ -51,18 +54,13 @@ export function AuthContextProvider({ children }) {
       isAuthenticated,
       isSeller,
       isBuyer,
+      names,
     }),
-    [login, logout, isAuthenticated, isSeller, isBuyer]
+    [login, logout, isAuthenticated, isSeller, isBuyer, names]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
-
-/*
-AuthContextProvider.propTypes = {
-  children: PropTypes.object,
-};
-*/
 
 export function useAuthContext() {
   return useContext(AuthContext);

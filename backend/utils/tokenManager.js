@@ -1,11 +1,11 @@
 import jwt from "jsonwebtoken";
-export const generateToken = (uid, rol) => {
+export const generateToken = (uid, rol, nombres) => {
   //const expiresIn = 60 * 15;
   const expiresIn = "1d";
 
   try {
     const token = jwt.sign({ uid, rol }, process.env.JWT_SECRET, { expiresIn });
-    return { token, rol, expiresIn };
+    return { token, rol, nombres, expiresIn };
   } catch (error) {
     console.log(error);
   }

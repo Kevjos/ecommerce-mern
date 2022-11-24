@@ -6,6 +6,7 @@ import {
   updateProduct,
   deleteProduct,
   getProductsByOwner,
+  getImageProduct,
 } from "../controllers/product.controller.js";
 
 import { requireToken, isSeller } from "../middlewares/requireToken.js";
@@ -28,6 +29,7 @@ router.get("/search", getProducts);
 
 router.get("/myproducts", requireToken, isSeller, getProductsByOwner);
 router.get("/:id", requireToken, isSeller, getProductById);
+router.get("/image/:productId", getImageProduct);
 router.put("/:id", requireToken, isSeller, updateProduct);
 router.delete("/:id", requireToken, isSeller, deleteProduct);
 
