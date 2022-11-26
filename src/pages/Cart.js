@@ -4,6 +4,7 @@ import { CartContext } from "../contexts/cartContext";
 import { BsCartCheck } from "react-icons/bs";
 import { formatNumber } from "../config/formatNumber";
 import { useNavigate } from "react-router-dom";
+import Container from "react-bootstrap/Container";
 
 export default function Cart() {
   const {
@@ -21,7 +22,7 @@ export default function Cart() {
     <>
       <section className="h-100 gradient-custom">
         {cartOpen && productsLength > 0 ? (
-          <div className="container py-5">
+          <div className="container py-4">
             <div className="row d-flex justify-content-center my-4">
               <div className="col-md-8">
                 <div className="card mb-4">
@@ -152,7 +153,7 @@ export default function Cart() {
             </div>
           </div>
         ) : (
-          <h1 className="my-5 text-center">Tu carro está vacío</h1>
+          <h3 className="my-3 text-center">Tu carro está vacío</h3>
         )}
       </section>
     </>

@@ -26,7 +26,7 @@ export default function Home() {
   }, [api]);
   return (
     <>
-      <Container className="py-4">
+      <Container fluid className="pt-2">
         <Search setSearch={setSearch} updatePageNumber={updatePageNumber} />
         <Row>
           <ProductCard page="/" results={productsList} search={search} />
