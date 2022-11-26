@@ -3,8 +3,9 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
 import "./App.css";
-import "bootstrap/dist/css/bootstrap.min.css";
-
+//import "bootstrap/dist/css/bootstrap.min.css";
+import "mdb-react-ui-kit/dist/css/mdb.min.css";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 import RegisterVendedor from "./pages/RegisterVendedor";
 import RegisterComprador from "./pages/RegisterComprador";
 import RegisterProduct from "./pages/RegisterProduct";
@@ -25,12 +26,12 @@ import {
 import { AuthContextProvider } from "./contexts/authContext";
 import { CartProvider } from "./contexts/cartContext";
 import Menu from "./components/Menu";
+import Loading from "./components/Loading";
 const Login = lazy(() => import("./pages/Login"));
 const HomeSeller = lazy(() => import("./pages/HomeSeller"));
 const EditProduct = lazy(() => import("./pages/EditProduct"));
 const BuyerHome = lazy(() => import("./pages/BuyerHome"));
 const Cart = lazy(() => import("./pages/Cart"));
-const Loading = lazy(() => import("./components/Loading"));
 const Home = lazy(() => import("./pages/Home"));
 const Logout = lazy(() => import("./pages/Logout"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));

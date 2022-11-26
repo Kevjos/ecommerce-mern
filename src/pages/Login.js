@@ -50,8 +50,8 @@ export default function Login() {
     }
   };
   return (
-    <form onSubmit={handleSubmit} id="form-register-product">
-      <MDBContainer fluid>
+    <form onSubmit={handleSubmit}>
+      <MDBContainer fluid className="my-5">
         <MDBRow className="d-flex justify-content-center align-items-center h-100">
           <MDBCol col="12">
             <MDBCard
@@ -72,6 +72,7 @@ export default function Login() {
                   size="lg"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  required
                 />
                 <MDBInput
                   wrapperClass="mb-4 w-100"
@@ -81,6 +82,7 @@ export default function Login() {
                   size="lg"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  required
                 />
 
                 <MDBBtn size="lg">Login</MDBBtn>
